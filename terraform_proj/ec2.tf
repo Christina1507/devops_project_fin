@@ -8,8 +8,6 @@ resource "aws_instance" "instance1" {
     aws_security_group.allow_tls.id
   ]
 
-  associate_public_ip_address = true
-
   user_data = <<-EOF
               #!/bin/bash
               apt update -y
@@ -33,8 +31,6 @@ resource "aws_instance" "instance2" {
   vpc_security_group_ids = [
     aws_security_group.allow_tls.id
   ]
-
-  associate_public_ip_address = true
 
   user_data = <<-EOF
               #!/bin/bash
