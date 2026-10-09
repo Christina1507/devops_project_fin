@@ -12,9 +12,8 @@ resource "aws_instance" "instance1" {
 
   user_data = <<-EOF
               #!/bin/bash
-              apt-get update -y
-              apt-get upgrade -y
-              apt-get install -y docker.io
+              apt update -y
+              apt install -y docker.io
               systemctl enable docker
               systemctl start docker
               usermod -aG docker ubuntu
@@ -22,8 +21,6 @@ resource "aws_instance" "instance1" {
 
   tags = {
     Name = "Project-Instance1"
-    name = "tf1"
-    team = "Devops"
   }
 }
 
@@ -41,9 +38,8 @@ resource "aws_instance" "instance2" {
 
   user_data = <<-EOF
               #!/bin/bash
-              apt-get update -y
-              apt-get upgrade -y
-              apt-get install -y docker.io
+              apt update -y
+              apt install -y docker.io
               systemctl enable docker
               systemctl start docker
               usermod -aG docker ubuntu
@@ -51,8 +47,6 @@ resource "aws_instance" "instance2" {
 
   tags = {
     Name = "Project-Instance2"
-    name = "tf2"
-    team = "Devops"
   }
 }
 
@@ -66,7 +60,7 @@ resource "aws_security_group" "allow_tls" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tcp_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   security_group_id = aws_security_group.allow_tls.id
 
   cidr_ipv4   = "0.0.0.0/0"
@@ -82,6 +76,15 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv4" {
   from_port   = 22
   ip_protocol = "tcp"
   to_port     = 22
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_https" {
+  security_group_id = aws_security_group.allow_tls.id
+
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 443
+  ip_protocol = "tcp"
+  to_port     = 443
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_ipv4" {
